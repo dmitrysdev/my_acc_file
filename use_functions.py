@@ -33,8 +33,25 @@
 
 Для реализации основного меню можно использовать пример ниже или написать свой
 """
+import os
+
 balance = 0
+
+if os.path.isfile("data.txt"):
+    file = open("data.txt", "r")
+    balance = int(file.read())
+    file.close()
+
 basket = []
+
+if os.path.isfile("basket.txt"):
+    file = open("basket.txt", "r")
+
+    for line in file:
+        basket.append(line)
+
+    file.close()
+
 while True:
     print('1. пополнение счета')
     print('2. покупка')
@@ -60,6 +77,14 @@ while True:
             print(item)
         pass
     elif choice == '4':
+        file = open("data.txt", "w")
+        file.write(str(balance))
+        file.close()
+
+        file = open("basket.txt", "w")
+        for i in basket:
+            file.write(i + '\n')
+        file.close()
         break
     else:
         print('Неверный пункт меню')
