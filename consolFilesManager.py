@@ -4,6 +4,39 @@ import pathlib
 import platform
 from myAccount import myAcc
 from victory import vic
+
+def getListDir():
+    folder = os.getcwd()
+
+    dir = pathlib.Path(folder)
+    files = [file.name for file in dir.iterdir() if file.is_file()]
+
+    ret = 'files:'
+
+    for f in files:
+        ret = ret + f
+        if f != files[-1]:
+            ret = ret + ', '
+
+    ret = ret + '\n'
+
+    subdir = []
+    with os.scandir(folder) as files:
+        subdir = [file.name for file in files if file.is_dir()]
+
+    ret = ret + 'dirs:'
+
+    for f in subdir:
+        ret = ret + f
+        if f != subdir[-1]:
+            ret = ret + ', '
+
+    fileO = open("listdir.txt", "w")
+    fileO.write(ret)
+    fileO.close()
+
+    return ret
+
 while True:
     print('1. создать папку')
     print('2. удалить (файл/папку)')
@@ -18,6 +51,7 @@ while True:
     print('11. смена рабочей директории (*необязательный пункт)')
     print('12. выход')
     print('13. сохранить содержимое рабочей директории в файл')
+    print('14. тестировать п.13')
 
     choice = input('Выберите пункт меню')
 
@@ -85,34 +119,22 @@ while True:
     elif choice == '12':
         break
     elif choice == '13':
-        folder = os.getcwd()
+        getListDir()
+        pass
+    elif choice == '14':
+        os.mkdir('test1')
+        os.mkdir('test2')
+        os.mkdir('test3')
 
-        dir = pathlib.Path(folder)
-        files = [file.name for file in dir.iterdir() if file.is_file()]
+        ld = getListDir()
 
-        ret = 'files:'
+        file = open("listdir.txt", "r")
 
-        for f in files:
-            ret = ret + f
-            if f != files[-1]:
-                ret = ret + ', '
+        ldf = file.read()
 
-        ret = ret + '\n'
+        file.close()
 
-        subdir = []
-        with os.scandir(folder) as files:
-            subdir = [file.name for file in files if file.is_dir()]
-
-        ret = ret + 'dirs:'
-
-        for f in subdir:
-            ret = ret + f
-            if f != subdir[-1]:
-                ret = ret + ', '
-
-        fileO = open("listdir.txt", "w")
-        fileO.write(ret)
-        fileO.close()
+        print(ld == ldf)
 
         pass
     else:

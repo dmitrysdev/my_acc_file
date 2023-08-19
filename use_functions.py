@@ -57,6 +57,7 @@ while True:
     print('2. покупка')
     print('3. история покупок')
     print('4. выход')
+    print('5. тестирование')
 
     choice = input('Выберите пункт меню')
     if choice == '1':
@@ -86,5 +87,22 @@ while True:
             file.write(i + '\n')
         file.close()
         break
+    elif choice == '5':
+        file = open("data.txt", "r")
+
+        print(balance == int(file.read()))
+        file.close()
+
+        file = open("basket.txt", "r")
+
+        basketf = file.read()
+
+        baskets = ''
+        baskets = baskets.join(basket)
+
+        print(baskets == basketf)
+        file.close()
+
+        pass
     else:
         print('Неверный пункт меню')
