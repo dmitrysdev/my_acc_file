@@ -14,28 +14,29 @@ def getListDir():
     ret = 'files:'
 
     for f in files:
-        ret = ret + f
-        if f != files[-1]:
-            ret = ret + ', '
+        ret = ret + f + (', ' if f != files[-1] else '')
 
     ret = ret + '\n'
 
     subdir = []
+
     with os.scandir(folder) as files:
         subdir = [file.name for file in files if file.is_dir()]
 
     ret = ret + 'dirs:'
 
     for f in subdir:
-        ret = ret + f
-        if f != subdir[-1]:
-            ret = ret + ', '
-
-    fileO = open("listdir.txt", "w")
-    fileO.write(ret)
-    fileO.close()
+        ret = ret + f + (', ' if f != subdir[-1] else '')
 
     return ret
+
+def getListDirDec(func):
+    def inner(*args, **kwargs):
+
+        print('сохранение в файл')
+        func(*args, **kwargs)
+
+    return inner
 
 while True:
     print('1. создать папку')
@@ -58,28 +59,28 @@ while True:
     if choice == '1':
         folder = str(input('введите название папки:'))
 
-        if os.path.isdir(folder) == False:
-            os.mkdir(folder)
+        os.mkdir(folder) if os.path.isdir(folder) == False else ''
+
         pass
     elif choice == '2':
         folder = str(input('введите название папки:'))
 
-        if os.path.isdir(folder) == True:
-            os.rmdir(folder)
+        os.rmdir(folder) if os.path.isdir(folder) == True else ''
+
         pass
     elif choice == '3':
         folder = str(input('введите название папки:'))
         newfolder = str(input('введите новое название папки:'))
 
-        if os.path.isdir(folder) == True:
-            shutil.copytree(folder, newfolder)
+        shutil.copytree(folder, newfolder) if os.path.isdir(folder) == True else ''
+
         pass
     elif choice == '4':
         folder = str(input('введите название папки:'))
 
         with os.scandir(folder) as files:
-            for file in files:
-                print(file.name)
+            print(file.name for file in files)
+
         pass
     elif choice == '5':
         folder = str(input('введите название папки:'))
@@ -119,23 +120,34 @@ while True:
     elif choice == '12':
         break
     elif choice == '13':
-        getListDir()
+        @getListDirDec
+        def fileSave():
+            ret = getListDir()
+
+            fileO = open("listdir.txt", "w")
+            fileO.write(ret)
+            fileO.close()
+            return
+
+        fs = getListDirDec(fileSave)
+        fs()
         pass
     elif choice == '14':
-        os.mkdir('test1')
-        os.mkdir('test2')
-        os.mkdir('test3')
+        try:
+            os.mkdir('test1')
+            os.mkdir('test2')
 
-        ld = getListDir()
+            ld = getListDir()
 
-        file = open("listdir.txt", "r")
+            file = open("listdir.txt", "r")
 
-        ldf = file.read()
+            ldf = file.read()
 
-        file.close()
+            file.close()
 
-        print(ld == ldf)
-
+            print(ld == ldf)
+        except:
+            print('Файл с сохраненным списком не существует')
         pass
     else:
         print('Неверный пункт меню')
