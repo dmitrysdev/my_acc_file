@@ -1,2 +1,2 @@
-files:basket.txt, borndayforewer.py, consolFilesManager.py, data.txt, listdir.txt, myAccount.py, myfunctions.py, use_functions.py, victory.py
-dirs:.git, .idea, __pycache__
+files:basket.txt, borndayforewer.py, consolFilesManager.py, data.txt, myAccount.py, myfunctions.py, use_functions.py, victory.py
+dirs:.git, .idea, test1, test2, test3, __pycache__
